@@ -1,6 +1,6 @@
 #!/ usr/bin/env python
 #coding: utf-8
-#By: maxime chaput droit:  cc by
+#By: maxime chaput & jonathan torel
 #Baser sur le programme de Arnaud FerwQBG69re
 #lecture d'un fichier pdb
 
@@ -36,22 +36,27 @@ def parsePDBMultiConfig(infile) :
 
     dddddd_PDB = {}
     for line in lines :
+		
 		if line[0:5] == "MODEL" :
 			config= line[5:14].strip()
 			dddddd_PDB[config]={}
 			dddddd_PDB[config]["domaine"]=[]
-		if line[0:4] == "ATOM" :
-			domain=line[72:74].strip()
+			
+		if line[0:4] == "ATOM" :	
+			
+			domain=line[72:74].strip()			
 			if not domain in dddddd_PDB[config]["domaine"]:
 				dddddd_PDB[config]["domaine"].append(domain)
 				dddddd_PDB[config][domain]={}
 				dddddd_PDB[config][domain]["reslist"] = []
+				
 			curres = line[22:26].strip()
 			if not curres in dddddd_PDB[config][domain]["reslist"] :
 				dddddd_PDB[config][domain]["reslist"].append(curres)
 				dddddd_PDB[config][domain][curres] = {}
 				dddddd_PDB[config][domain][curres]["resname"] = line[17:20].strip()
 				dddddd_PDB[config][domain][curres]["atomlist"] = []
+				
 			atomtype = line[12:16].strip()
 			dddddd_PDB[config][domain][curres]["atomlist"].append(atomtype)
 			dddddd_PDB[config][domain][curres][atomtype] = {}
@@ -59,6 +64,7 @@ def parsePDBMultiConfig(infile) :
 			dddddd_PDB[config][domain][curres][atomtype]["y"] = float(line[38:46])
 			dddddd_PDB[config][domain][curres][atomtype]["z"] = float(line[46:54])
 			dddddd_PDB[config][domain][curres][atomtype]["id"] = line[6:11].strip()
+			
     #~ print dddddd_PDB[config]["domaine"]
     return dddddd_PDB
 
