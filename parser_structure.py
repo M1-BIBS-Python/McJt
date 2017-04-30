@@ -77,16 +77,93 @@ def parsePDBMultiConfig(infile) :
 
 
 ### Ici, vous pourrez testez vos fonctions :
-if __name__ == "__main__":
-    
-    # Pour afficher une structure de façon un peu plus esthétique :
-    #~ import json
-    #~ print("Données pur config : \n"+json.dumps(parsePDBMultiConfig("pab21_structure_de_ref.pdb"), indent = 4))
-    d_dico=parsePDBMultiConfig("pab21_prod_solute_500frames.pdb")
-    #~ print d_dico
-    #~ print("\nIdentifiants des chaînes de la protéine 1EJH :")
-    #~ print(parsePDBMultiChains("1EJH.pdb")["chains"])
-    #~ print("\nIdentifiants des résidus de la chaîne A de la protéine 1EJH :")
-    #~ print(parsePDBMultiChains("1EJH.pdb")["A"]["reslist"])
+
+# HEAD
+def calculCDM(d_pdb) :
+	#auteur : maxime
+	"""
+        Cette fonction permet de calculer le centre de masse de chaque residus de chaque configuration
+        
+        Paramètre(s) :
+            - infile : dictionnaire resultat du parser
+        
+        Valeur renvoyée :
+            - d_pdb : dictionnaire modife
+            
+    """
+	for confi in d_pdb.keys() :
+		for domaine in d_pdb[confi]["domaine"]:
+			for res in d_pdb[confi][domaine]["reslist"]:
+				mx=0
+				my=0
+				mz=0
+				mtot=0
+				for atome in d_pdb[confi][domaine][res]["atomlist"]:
+					#donne la ponderation de chaque atome
+					if atome[0] == "H" :                                   
+						masse=1
+					elif atome[0] == "C" :
+						masse=12
+					elif atome[0] =="O" :
+						masse=16
+					elif atome[0] == "N" :
+						masse=14
+					elif atome[0] == "S" :
+						masse=32
+					elif atome[0] == "P" :
+						masse=31
+					elif atome[0] == "Z" :
+						masse=65
+					#faire la somme pondere pour chaque coordonee
+					mx+=masse*d_pdb[confi][domaine][res][atome]["x"]     
+					my+=masse*d_pdb[confi][domaine][res][atome]["y"]
+					mz+=masse*d_pdb[confi][domaine][res][atome]["z"]
+					mtot+=masse
+				d_pdb[confi][domaine][res]["CDM"]=[mx/mtot,my/mtot,mz/mtot] #calcul des coordonnees du centre de masse
+	print d_pdb			
+	
+#RMSD
+#source : https://bioinfo-fr.net/comparaison-de-structures-le-rmsd
+   
+def RMSDconf(conf1,conf2):
+	#fonction permettant de calculer RMSD entre 2 conformations (conf1 étant la reference)
+	
+	numerateur=float
+	n=float
+	numerateur=0
+	n=0
+	
+	for resid1 in conf1[""].keys:
+		for resid2 in conf2[""].keys:
+			if (resid2==resid1):
+				for atom in conf2[""][resid2]["atomlist"]: #conf1 valeurs theoriques (ref) conf2 valeurs obs (ref - theo)**2
+					numerateur+=((conf1[][resid2][atomtype["x"]-conf2[][resid2][atomtype]["x"])**2)+((conf1[][resid2][atomtype["y"]-conf2[][resid2][atomtype]["y"])**2)+((conf1[][resid2][atomtype["z"]-conf2[][resid2][atomtype]["z"])**2)
+					n+=1
+	
+	rmsd=sqrt(numerateur/n)
+	return rmsd
+	
+	
+	
+def RMSDdom(conf1,conf2,domaine):
+	#fonction permettant de calculer RMSD entre 2 conformations (une étant la reference) pour 1 domaine precis
+	#meme fonction que precedement avec juste la condition du domaine
+	#source : https://bioinfo-fr.net/comparaison-de-structures-le-rmsd
+
+numerateur=float
+	n=float
+	numerateur=0
+	n=0
+	
+	for resid1 in conf1[""].keys:
+		for resid2 in conf2[""].keys:
+			if (resid2==resid1):
+				for atom in conf2[""][resid2]["atomlist"]: #conf1 valeurs theoriques (ref) conf2 valeurs obs (ref - theo)**2
+					if conf2[][resid2]["domaine"]==domaine:
+						numerateur+=((conf1[][resid2][atomtype["x"]-conf2[][resid2][atomtype]["x"])**2)+((conf1[][resid2][atomtype["y"]-conf2[][resid2][atomtype]["y"])**2)+((conf1[][resid2][atomtype["z"]-conf2[][resid2][atomtype]["z"])**2)
+						n+=1
+	
+	rmsd=sqrt(numerateur/n)
+	return rmsd
     
 	
