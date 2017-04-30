@@ -60,6 +60,8 @@ def parsePDBMultiConfig(infile) :
 			atomtype = line[12:16].strip()
 			dddddd_PDB[config][domain][curres]["atomlist"].append(atomtype)
 			dddddd_PDB[config][domain][curres][atomtype] = {}
+			
+			#verification que les coordonnees sont bien des float:
 			dddddd_PDB[config][domain][curres][atomtype]["x"] = float(line[30:38])
 			dddddd_PDB[config][domain][curres][atomtype]["y"] = float(line[38:46])
 			dddddd_PDB[config][domain][curres][atomtype]["z"] = float(line[46:54])
