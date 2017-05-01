@@ -177,10 +177,9 @@ def calculCDM(d_pdb) :
 				d_pdb[confi][domaine][res]["CDM"]=[mx/mtot,my/mtot,mz/mtot] #calcul des coordonnees du centre de masse
 	print d_pdb			
 	
-#RMSD
-#source : https://bioinfo-fr.net/comparaison-de-structures-le-rmsd
-   
-def RMSDconf(conf1,conf2):
+#RMSD ne marchent pas pour le moment je ne pense pas que la fct soit fausse mais plutot mon appel de fct
+
+def RMSDconf(conf1,conf2):  
 	#fonction permettant de calculer RMSD entre 2 conformations (conf1 étant la reference)
 	
 	numerateur=float
@@ -188,11 +187,11 @@ def RMSDconf(conf1,conf2):
 	numerateur=0
 	n=0
 	
-	for resid1 in conf1[""].keys:
-		for resid2 in conf2[""].keys:
+	for domain in conf1.keys():
+		for resid2 in conf2.keys():
 			if (resid2==resid1):
-				for atom in conf2[""][resid2]["atomlist"]: #conf1 valeurs theoriques (ref) conf2 valeurs obs (ref - theo)**2
-					numerateur+=((conf1[""][resid2][atomtype["x"]-conf2[""][resid2][atomtype]["x"])**2)+((conf1[""][resid2][atomtype["y"]-conf2[""][resid2][atomtype]["y"])**2)+((conf1[""][resid2][atomtype["z"]-conf2[""][resid2][atomtype]["z"])**2)
+				for atomtype in conf2[""][resid2]["atomlist"]: #conf1 valeurs theoriques (ref) conf2 valeurs obs (ref - theo)**2
+					numerateur+=((conf1[""][resid1][atomtype]["x"]-conf2[""][resid2][atomtype]["x"])**2)+((conf1[""][resid1][atomtype]["y"]-conf2[""][resid2][atomtype]["y"])**2)+((conf1[""][resid1][atomtype]["z"]-conf2[""][resid2][atomtype]["z"])**2)
 					n+=1
 	
 	rmsd=sqrt(numerateur/n)
@@ -205,20 +204,29 @@ def RMSDdom(conf1,conf2,domaine):
 	#meme fonction que precedement avec juste la condition du domaine
 	#source : https://bioinfo-fr.net/comparaison-de-structures-le-rmsd
 
-numerateur=float
+	numerateur=float
 	n=float
 	numerateur=0
 	n=0
 	
-	for resid1 in conf1[""].keys:
-		for resid2 in conf2[""].keys:
+	for resid1 in conf1.keys():
+		print AA
+		for resid2 in conf2.keys():
+			print BB
 			if (resid2==resid1):
-				for atom in conf2[""][resid2]["atomlist"]: #conf1 valeurs theoriques (ref) conf2 valeurs obs (ref - theo)**2
-					if conf2[][resid2]["domaine"]==domaine:
-						numerateur+=((conf1[""][resid2][atomtype["x"]-conf2[""][resid2][atomtype]["x"])**2)+((conf1[""][resid2][atomtype["y"]-conf2[""][resid2][atomtype]["y"])**2)+((conf1[""][resid2][atomtype["z"]-conf2[""][resid2][atomtype]["z"])**2)
+				for atomtype in conf2[""][resid2]["atomlist"]: #conf1 valeurs theoriques (ref) conf2 valeurs obs (ref - theo)**2
+					if conf2[""][resid2]["domaine"]==domaine:
+						numerateur+=((conf1[""][resid1][atomtype]["x"]-conf2[""][resid2][atomtype]["x"])**2)+((conf1[""][resid2][atomtype]["y"]-conf2[""][resid2][atomtype]["y"])**2)+((conf1[""][resid1][atomtype]["z"]-conf2[""][resid2][atomtype]["z"])**2)
 						n+=1
 	
 	rmsd=sqrt(numerateur/n)
 	return rmsd
-    
+
+#fct pour l'interface
+
+def calcdist(atom1,atom2):
+	""" Calcule la distance entre deux atomes de coordonnees x,y,z.
+        """
+    return ((atom1['x'] - atom2['x'])**2 + (atom1['y'] - atom2['y'])**2 + (atom1['z'] - atom2['z'])**2)
+
 	
