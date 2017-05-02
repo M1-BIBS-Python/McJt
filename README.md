@@ -1,9 +1,16 @@
 # McJt
 Projet sRNP H/ACA de CHAPUT MAXIME et TOREL-SALAT JONATHAN
 
+
+
+FILES:
+
 Sujet: Sujet.pdf
 
+Compte Rendu: CR_projet.pdf
+
 Fichier python regroupant les fonctions : .py
+!!! Problème de code rencontré lors du calcul du temps de contact, code incomplet :(
 
 Fichier python contenant le main: main.py
 
