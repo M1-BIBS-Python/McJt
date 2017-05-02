@@ -9,7 +9,7 @@ Sujet: Sujet.pdf
 
 Compte Rendu: CR_projet.pdf
 
-Fichier python regroupant les fonctions : .py
+Fichier python regroupant les fonctions : final_fonction.py
 !!! Problème de code rencontré lors du calcul du temps de contact, code incomplet :(
 
 Fichier python contenant le main: main.py
