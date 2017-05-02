@@ -15,6 +15,7 @@ RMSD_A3.pnj
 RMSD_A4.pnj
 RMSD_B. pnj
 
+Trop lourd pour upload :
 Data : 
 
 conformation de référence : pab21_structure_de_ref.pdb
